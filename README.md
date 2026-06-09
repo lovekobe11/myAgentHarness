@@ -77,7 +77,7 @@ When the agent attempts to write code containing dangerous operations, the guard
 
 Edit `.env` to select your provider and supply the API key:
 
-### Anthropic (default)
+### Anthropic (example)
 ```bash
 PROVIDER=anthropic
 ANTHROPIC_API_KEY=your_key
@@ -93,36 +93,12 @@ MAIN_MODEL=deepseek-chat
 MEMORY_MODEL=deepseek-chat
 ```
 
-### Kimi (Moonshot)
-```bash
-PROVIDER=kimi
-OPENAI_COMPATIBLE_API_KEY=your_key
-MAIN_MODEL=moonshot-v1-8k
-MEMORY_MODEL=moonshot-v1-8k
-```
-
 ### Qwen (Alibaba)
 ```bash
 PROVIDER=qwen
 OPENAI_COMPATIBLE_API_KEY=your_key
 MAIN_MODEL=qwen-plus
 MEMORY_MODEL=qwen-turbo
-```
-
-### GLM (Z.ai)
-```bash
-PROVIDER=glm
-OPENAI_COMPATIBLE_API_KEY=your_key
-MAIN_MODEL=glm-4-air
-MEMORY_MODEL=glm-4-flash
-```
-
-### MiniMax
-```bash
-PROVIDER=minimax
-OPENAI_COMPATIBLE_API_KEY=your_key
-MAIN_MODEL=abab6.5s-chat
-MEMORY_MODEL=abab6.5s-chat
 ```
 
 ### OpenAI / GPT
