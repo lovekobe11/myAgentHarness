@@ -4,7 +4,7 @@ Minimal Agent Harness built on LangGraph. Multi-provider, safety-guarded, memory
 
 ## Features
 
-- Multi-provider support (9 providers: Anthropic, OpenAI, DeepSeek, Kimi, Qwen, GLM, MiniMax, Xiaomi, Custom)
+- Multi-provider support (Anthropic, OpenAI, DeepSeek, Qwen, Custom)
 - 3-tier tool safety guard (auto-approve / always-confirm / keyword-check)
 - Cross-session long-term memory (persisted to `memory.json`)
 - Minimal 6-layer architecture
