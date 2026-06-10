@@ -109,12 +109,6 @@ MAIN_MODEL=gpt-4o
 MEMORY_MODEL=gpt-4o-mini
 ```
 
-### Xiaomi
-```bash
-PROVIDER=xiaomi
-OPENAI_COMPATIBLE_API_KEY=your_key
-MAIN_MODEL=your-model-name
-MEMORY_MODEL=your-model-name
 ```
 
 ### Custom Provider (any OpenAI-compatible API)
