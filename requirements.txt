@@ -7,3 +7,6 @@ typing_extensions>=4.0.0
 # OpenAI compatible provider dependencies(when PROVIDER != anthropic)
 # pip install langchain-openai
 # langchain-openai>=0.1.0
+
+# ACP (Agent Client Protocol) — for acp_server.py
+agent-client-protocol>=0.1.0
