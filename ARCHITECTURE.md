@@ -140,4 +140,4 @@ repeat until done or max steps
 - The harness is designed for experimentation with multi-provider LLMs.
 - The loop is bounded by `config.MAX_STEPS` to prevent runaway reasoning.
 - All side-effectful file operations are gated by explicit approval.
-- `memory.json` keeps up to 20 summaries and injects the 5 newest into the prompt.
+- `memory.json` keeps up to 20 summaries and injects into the prompt.

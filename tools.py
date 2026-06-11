@@ -9,6 +9,7 @@ Tool Security Levels (corresponding to guard.py):
   KEYWORD_CHECK : run_python, run_sql                   ← Content-based risk assessment
 """
 
+import math
 import os
 import sqlite3
 import subprocess
@@ -195,6 +196,7 @@ def run_sql(sql: str) -> str:
 
     except sqlite3.Error as e:
         return f"❌ SQL error: {e}"
+
 
 
 # ── Registry ──────────────────────────────────────────────

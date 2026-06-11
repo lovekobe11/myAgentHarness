@@ -1,6 +1,6 @@
 # myAgentHarness
 
-Minimal Agent Harness built on LangGraph. Multi-provider, safety-guarded, memory-enabled.
+Minimal Agent Harness built on LangGraph. Multi-provider, safety-guarded, memory-enabled, tools-included.
 
 ## Features
 
@@ -81,16 +81,16 @@ Edit `.env` to select your provider and supply the API key:
 ```bash
 PROVIDER=anthropic
 ANTHROPIC_API_KEY=your_key
-MAIN_MODEL=claude-sonnet-4-20250514
-MEMORY_MODEL=claude-haiku-4-5-20251001
+MAIN_MODEL=claude-opus
+MEMORY_MODEL=claude-mythos
 ```
 
 ### DeepSeek
 ```bash
 PROVIDER=deepseek
 OPENAI_COMPATIBLE_API_KEY=your_key
-MAIN_MODEL=deepseek-chat
-MEMORY_MODEL=deepseek-chat
+MAIN_MODEL=deepseek-V4
+MEMORY_MODEL=deepseek-V4
 ```
 
 ### Qwen (Alibaba)
@@ -105,8 +105,8 @@ MEMORY_MODEL=qwen-turbo
 ```bash
 PROVIDER=openai
 OPENAI_COMPATIBLE_API_KEY=your_key
-MAIN_MODEL=gpt-4o
-MEMORY_MODEL=gpt-4o-mini
+MAIN_MODEL=gpt-5
+MEMORY_MODEL=gpt-5-mini
 ```
 
 

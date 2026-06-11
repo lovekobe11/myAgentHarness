@@ -4,7 +4,7 @@ myAgentHarness — Main Entry Point
 Based on LangGraph small Agent Harness demo。
 
 Config edit .env file to set provider and API keys, then run.
-Supported Provider: anthropic / openai / deepseek / kimi / minimax / qwen / glm
+Supported Provider: anthropic / openai / deepseek / qwen
 
 Architecture:
   [User Input]
@@ -23,6 +23,26 @@ Usage:
   python harness.py
 """
 
+# Recommended startup: re-exec the interpreter with -W flags to silence specific noisy warnings
+# This ensures warnings emitted during early imports (urllib3/langgraph) are suppressed.
+import os
+import sys
+_WARN_FILTERS = [
+    # Match the urllib3 message text
+    "ignore:.*urllib3 v2 only supports OpenSSL.*",
+    # Match the langgraph/langchain allowed_objects deprecation hint
+    "ignore:.*allowed_objects.*",
+]
+
+# If the desired filters are not present in PYTHONWARNINGS, set it and re-exec the interpreter.
+current_warnings = os.environ.get("PYTHONWARNINGS", "")
+if not all(f in current_warnings for f in _WARN_FILTERS):
+    os.environ["PYTHONWARNINGS"] = ",".join(_WARN_FILTERS)
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+
+
 from typing import Annotated
 
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -30,6 +50,29 @@ from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 from typing_extensions import TypedDict
+import logging
+
+
+# Simple logger: writes INFO+ to console and DEBUG+ to harness.log
+LOG_FILE = "harness.log"
+logger = logging.getLogger("harness")
+logger.setLevel(logging.DEBUG)
+# Ensure any existing handlers also accept DEBUG so debug logs are emitted
+for _h in logger.handlers:
+    try:
+        _h.setLevel(logging.DEBUG)
+    except Exception:
+        pass
+if not logger.handlers:
+    fmt = logging.Formatter("[%(asctime)s] %(levelname)-5s %(message)s", "%H:%M:%S")
+    sh = logging.StreamHandler()
+    sh.setLevel(logging.DEBUG)
+    sh.setFormatter(fmt)
+    fh = logging.FileHandler(LOG_FILE, encoding="utf-8")
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(fmt)
+    logger.addHandler(sh)
+    logger.addHandler(fh)
 
 import config
 from guard import should_confirm, request_human_approval
@@ -64,7 +107,7 @@ def agent_node(state: HarnessState) -> dict:
     system = SystemMessage(content=get_system_prompt())
     messages = [system] + state["messages"]
 
-    print(f"\n[HARNESS] Step {state['step_count'] + 1}/{config.MAX_STEPS} — Agent thinking...")
+    logger.info(f"[HARNESS] Step {state['step_count'] + 1}/{config.MAX_STEPS} — Agent thinking...")
     response = llm.invoke(messages)
 
     return {
@@ -97,7 +140,7 @@ tool_node = ToolNode(TOOLS)
 
 def route_after_agent(state: HarnessState) -> str:
     if state["step_count"] >= config.MAX_STEPS:
-        print(f"\n[HARNESS] ⚠️  Max steps ({config.MAX_STEPS}) reached. Stopping.")
+        logger.warning(f"[HARNESS] ⚠️  Max steps ({config.MAX_STEPS}) reached. Stopping.")
         return END
     last = state["messages"][-1]
     if hasattr(last, "tool_calls") and last.tool_calls:
@@ -110,7 +153,7 @@ def route_after_guard(state: HarnessState) -> str:
 
 
 # ──────────────────────────────────────────────────
-# 构建图
+# Building the Harness Graph
 # ──────────────────────────────────────────────────
 
 def build_harness():

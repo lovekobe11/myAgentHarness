@@ -18,6 +18,16 @@ Usage:
 import os
 from pathlib import Path
 
+# Suppress noisy third-party warnings early (NotOpenSSLWarning, LangChain pending deprecation)
+import warnings
+try:
+    from urllib3.exceptions import NotOpenSSLWarning
+    warnings.filterwarnings("ignore", category=NotOpenSSLWarning)
+except Exception:
+    pass
+# Suppress messages about `allowed_objects` changing in langgraph/langchain
+warnings.filterwarnings("ignore", message=r".*allowed_objects.*")
+
 # ── Load .env ──────────────────────────────────────────────────────
 _env_path = Path(__file__).parent / ".env"
 if _env_path.exists():
@@ -90,24 +100,6 @@ def get_llm(model: str):
 
 # ── Validate Config ───────────────────────────────────────────────────────
 def validate():
-    if PROVIDER == "anthropic":
-        if not ANTHROPIC_API_KEY:
-            raise EnvironmentError(
-                "\n❌ ANTHROPIC_API_KEY is not set.\n"
-                "   Edit .env: ANTHROPIC_API_KEY=your_key_here\n"
-            )
-    else:
-        if not OPENAI_COMPATIBLE_API_KEY:
-            raise EnvironmentError(
-                f"\n❌ OPENAI_COMPATIBLE_API_KEY is not set (provider={PROVIDER}).\n"
-                f"   Edit .env: OPENAI_COMPATIBLE_API_KEY=your_key_here\n"
-            )
-        base_url = OPENAI_COMPATIBLE_BASE_URL or _DEFAULT_BASE_URLS.get(PROVIDER, "")
-        if not base_url:
-            raise EnvironmentError(
-                f"\n❌ Cannot resolve base_url for provider '{PROVIDER}'.\n"
-                f"   Edit .env: OPENAI_COMPATIBLE_BASE_URL=https://...\n"
-            )
 
     # Check langchain-openai is installed for non-anthropic providers
     if PROVIDER != "anthropic":
